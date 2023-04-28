@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import {
   GoogleAuthProvider,
-  createUserWithEmailAndPassword,
   getAuth,
+  signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 import { AppContext } from "../App";
@@ -14,7 +14,7 @@ const provider = new GoogleAuthProvider();
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setRoute } = useContext(AppContext);
+  const { setRoute, setUser } = useContext(AppContext);
 
   const loginGoogle = () => {
     signInWithPopup(auth, provider)
@@ -24,6 +24,9 @@ const Login = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+        setUser(user);
+        localStorage.setItem(`user`, JSON.stringify(user));
+        toast.success(`User ${user.email} successfully login!`);
         // IdP data available using getAdditionalUserInfo(result)
         // LOGS
         console.log(`[ Login ] Token: ${token}`);
@@ -38,19 +41,21 @@ const Login = () => {
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // LOGS
-        console.log(`[ LOGIN - GOOGLE ] Error: ${errorMessage}`, error);
-        console.log(`[ LOGIN - GOOGLE ] Error mail: ${errorEmail}`);
-        console.log(`[ LOGIN - GOOGLE ] Error credential: ${credential}`);
+        console.error(`[ LOGIN - GOOGLE ] Error: ${errorMessage}`, error);
+        console.error(`[ LOGIN - GOOGLE ] Error mail: ${errorEmail}`);
+        console.error(`[ LOGIN - GOOGLE ] Error credential: ${credential}`);
       });
   };
 
   const loginEmail = (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        toast.success(`User ${email} successfully registered!`);
+        setUser(user);
+        localStorage.setItem(`user`, JSON.stringify(user));
+        toast.success(`User ${email} successfully login!`);
         setEmail("");
         setPassword("");
         setRoute("home");
@@ -61,8 +66,8 @@ const Login = () => {
         //const errorCode = error.code;
         const errorMessage = error.message;
         // LOGS
-        console.log(`[ LOGIN - EMAIL ] Error message: ${errorMessage}`, error);
-        console.log(`[ LOGIN - EMAIL ] Error: `, error);
+        console.error(`[ LOGIN - EMAIL ] Error message: ${errorMessage}`, error);
+        console.error(`[ LOGIN - EMAIL ] Error: `, error);
       });
   };
 
@@ -77,7 +82,7 @@ const Login = () => {
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold text-amber-400 leading-9 tracking-tigh">
-            Register
+            Login
           </h2>
         </div>
         {/* EMAIL */}

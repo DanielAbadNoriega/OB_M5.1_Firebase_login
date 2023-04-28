@@ -8,7 +8,7 @@ const auth = getAuth();
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setRoute } = useContext(AppContext);
+  const { setRoute, setUser } = useContext(AppContext);
 
   const newUser = () => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -16,6 +16,8 @@ const Register = () => {
         // Signed in
         const user = userCredential.user;
         toast.success(`User ${email} successfully registered!`);
+        localStorage.setItem(`user`, JSON.stringify(user));
+        setUser(user)
         setEmail("");
         setPassword("");
         setRoute("home");
@@ -26,8 +28,8 @@ const Register = () => {
         //const errorCode = error.code;
         const errorMessage = error.message;
         // LOG
-        console.log(`[ REGISTER ] Error message: ${errorMessage}`, error);
-        console.log(`[ REGISTER ] Error: `, error);
+        console.error(`[ REGISTER ] Error message: ${errorMessage}`, error);
+        console.error(`[ REGISTER ] Error: `, error);
       });
   };
 
