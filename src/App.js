@@ -8,6 +8,8 @@ import Home from "./routes/Home";
 import Login from "./routes/Login";
 import Register from "./routes/Register";
 import { Toaster } from "react-hot-toast";
+import Shopping from "./routes/Shopping";
+import Footer from "./components/footer";
 /**
  * Create the context and its exportation to use it in each component
  */
@@ -24,14 +26,18 @@ function App() {
 
   return (
     <AppContext.Provider value={{ route, setRoute, user, setUser }}>
-      <Toaster position="top-center" reverseOrder={false} />
-      <Header></Header>
-      <main className="p-6">
-        {route === "home" && <Home />}
-        {route === "login" && <Login />}
-        {route === "register" && <Register />}
-        {user && <p>Usuario logueado: {user.email}</p>}
-      </main>
+      <div className="h-screen">
+        <Toaster position="top-center" reverseOrder={false} />
+        <Header></Header>
+        <main className="p-6 py-24">
+          {route === "home" && <Home />}
+          {route === "login" && <Login />}
+          {route === "register" && <Register />}
+          {route === "shopping" && <Shopping />}
+          {user && <p>Usuario logueado: {user.email}</p>}
+        </main>
+        <Footer />
+      </div>
     </AppContext.Provider>
   );
 }
