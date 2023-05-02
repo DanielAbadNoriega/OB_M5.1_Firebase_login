@@ -32,7 +32,7 @@ const Header = () => {
       >
         <SiFirebase className="text-2xl text-amber-500" />
         <span className="text-xl font-semibold text-amber-400">
-          FireShopping
+          FireShopping v1.0
         </span>
       </div>
       <div>
