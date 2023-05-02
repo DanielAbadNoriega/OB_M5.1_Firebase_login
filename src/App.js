@@ -10,6 +10,7 @@ import Register from "./routes/Register";
 import { Toaster } from "react-hot-toast";
 import Shopping from "./routes/Shopping";
 import Footer from "./components/footer";
+import TaskList from "./components/TaskList";
 /**
  * Create the context and its exportation to use it in each component
  */
@@ -34,6 +35,7 @@ function App() {
           {route === "login" && <Login />}
           {route === "register" && <Register />}
           {route === "shopping" && <Shopping />}
+          {route === "tasklist" && <TaskList />}
           {user && <p>Usuario logueado: {user.email}</p>}
         </main>
         <Footer />
