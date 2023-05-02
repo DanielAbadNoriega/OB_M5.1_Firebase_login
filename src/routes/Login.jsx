@@ -27,6 +27,7 @@ const Login = () => {
         setUser(user);
         localStorage.setItem(`user`, JSON.stringify(user));
         toast.success(`User ${user.email} successfully login!`);
+        setRoute("home");
         // IdP data available using getAdditionalUserInfo(result)
         // LOGS
         console.log(`[ Login ] Token: ${token}`);
@@ -66,7 +67,10 @@ const Login = () => {
         //const errorCode = error.code;
         const errorMessage = error.message;
         // LOGS
-        console.error(`[ LOGIN - EMAIL ] Error message: ${errorMessage}`, error);
+        console.error(
+          `[ LOGIN - EMAIL ] Error message: ${errorMessage}`,
+          error
+        );
         console.error(`[ LOGIN - EMAIL ] Error: `, error);
       });
   };

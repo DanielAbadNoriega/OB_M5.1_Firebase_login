@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   addNewTask,
   getTasks,
   removeTask,
   updateTask,
 } from "../firebase/taskController";
+import { AppContext } from "../App";
 
 /* const task = {
   title: "This is the title",
@@ -14,6 +15,8 @@ import {
 const TaskList = () => {
   // const [title, setTitle] = useState("");
   // const [description, setDescription] = useState("");
+  const { user } = useContext(AppContext);
+
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -29,7 +32,8 @@ const TaskList = () => {
 
   const createNewTask = async () => {
     // console.log(`[ TASKLIST ] Create new task: `, task);
-    await addNewTask(task);
+    console.log("entro");
+    await addNewTask(task).catch((e) => console.error(e));
     setTask({ title: "", description: "" });
     initializeTasks();
     setEditMode("off");
@@ -40,7 +44,6 @@ const TaskList = () => {
       .then((t) => setTasks([...t]))
       .catch((error) => {
         console.error("[ TASKLIST getTasks ] Error: ", error);
-        console.error("[ TASKLIST getTasks ] Error message: ", error.message);
       });
   };
 
@@ -72,27 +75,32 @@ const TaskList = () => {
         <input
           type="text"
           value={task.title}
+          disabled={!user}
           placeholder="Title"
-          className="w-full px-2 py-1 border-none shadow-md rounded focus:ring-2 focus:ring-amber-400"
+          className="w-full px-2 py-1 border-none shadow-md rounded focus:ring-2 focus:ring-amber-400 disabled:placeholder:text-slate-200"
           onChange={(e) => setTask({ ...task, title: e.target.value })}
         />
         <textarea
           type="text"
           rows={3}
           value={task.description}
+          disabled={!user}
           placeholder="Description"
-          className="w-full px-2 py-1 border-none shadow-md rounded focus:ring-2 focus:ring-amber-400"
+          className="w-full px-2 py-1 border-none shadow-md rounded focus:ring-2 focus:ring-amber-400 disabled:placeholder:text-slate-200"
           onChange={(e) => setTask({ ...task, description: e.target.value })}
         />
 
         <button
-          className="py-2 px-4 rounded shadow bg-amber-300 text-white font-semibold hover:bg-amber-500 transition"
+          className="py-2 px-4 rounded shadow  text-white font-semibold bg-amber-300 hover:bg-amber-500 disabled:bg-slate-300 transition"
           onClick={() =>
             editMode === "off" ? createNewTask() : updateTaskItem()
           }
+          disabled={!user}
         >
           {editMode === "off" ? "ADD" : "EDIT"}
         </button>
+
+        {!user &&  <p className="text-red-500">You must be sign in to add tasks.</p>}
 
         <div className="w-full grid grid-cols-1 md:grid-cols-3">
           {tasks.length > 0 &&
